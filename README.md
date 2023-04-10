@@ -26,6 +26,8 @@ blockswap-worker-1         | [2023-04-10 18:29:07,707: WARNING/ForkPoolWorker-16
 
 The Graph > QuickNode > Celery (on Redis) > PostgreSQL.
 
+![Architecture](./architecture.png)
+
 #### Celery
 
 Celery is selected for its lightweightedness, and its ability to run tasks in the background with minimal overhead & latency.
