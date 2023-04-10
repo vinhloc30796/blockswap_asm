@@ -6,7 +6,7 @@ from celery import group
 from celery_client import app
 from thegraph import get_stakehouse_accnts, get_bls_list
 from quicknode import get_validators
-from postgres import make_conn, insert_validator_balances
+from postgres import insert_validator_balances, calc_sum_balances
 
 # Set logging level to INFO
 logging.basicConfig(level=logging.INFO)
@@ -22,6 +22,11 @@ def setup_periodic_tasks(sender, **kwargs):
         BEAT_SECONDS,
         process_all_stakehouse_validators.s(),
         name="process all stakehouse validators",
+    )
+    sender.add_periodic_task(
+        BEAT_SECONDS * 3,
+        calc_sum_balances.s(),
+        name="calculate sum of balances",
     )
 
 

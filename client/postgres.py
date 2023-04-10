@@ -79,6 +79,24 @@ def insert_validator_balances(validator: Dict) -> bool:
                 return False
             conn.commit()
             return True
+        
+
+@app.task
+def calc_sum_balances() -> int:
+    with make_conn() as conn:
+        with conn.cursor() as cur:
+            try:
+                cur.execute(
+                    """
+                    SELECT SUM(balance) FROM validator_balances
+                    """
+                )
+                result = cur.fetchone()[0]
+                print(f"Total balance: {result}")
+                return result
+            except Exception as e:
+                logging.error(f"[Validator] {e}")
+                return False
 
 
 if __name__ == "__main__":
