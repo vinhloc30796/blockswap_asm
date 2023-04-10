@@ -1,0 +1,12 @@
+{
+    stakehouseAccounts(where: { numberOfDeposits_gt: "0" }) {
+        accountId
+        lastDepositDepositCount
+        blsSigningKeyCipherText
+        numberOfDeposits
+        blsPubKeyDeposits {
+            blsPubKey
+            blsSignature
+        }
+    }
+}
