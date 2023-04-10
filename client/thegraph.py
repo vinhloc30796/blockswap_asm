@@ -5,7 +5,10 @@ from typing import List, Dict, Iterable
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
+from celery_client import app
 
+
+@app.task()
 def get_stakehouse_accnts(url: str, filename: str) -> Dict:
     with open(filename, "r") as f:
         query = f.read()
@@ -14,6 +17,7 @@ def get_stakehouse_accnts(url: str, filename: str) -> Dict:
     transport = AIOHTTPTransport(url=url)
     client = Client(transport=transport, fetch_schema_from_transport=True)
     results = client.execute(document=gql(query))
+    logging.info(f"[Stakehouse GQL] Finished! {results=}")
     return results
 
 

@@ -1,10 +1,13 @@
 import os
+import logging
 import requests
 from typing import Dict
 
+from celery_client import app
+
 SAMPLE_BLS_KEY = "0x8021cca323eb594a275752032852777098ef5bc7970db412c9c2c10be3f083d1e02fbe5d0992f24e9aa52a9f7815fe59"
 
-
+@app.task()
 def get_validators(bls_key: str = SAMPLE_BLS_KEY) -> Dict:
     """
     Get validator information from Quicknode API

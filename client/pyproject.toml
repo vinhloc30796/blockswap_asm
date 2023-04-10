@@ -8,6 +8,9 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 gql = {extras = ["all"], version = "^3.4.0"}
+celery = {extras = ["redis"], version = "^5.2.7"}
+psycopg2-binary = "^2.9.6"
+flower = "^1.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
