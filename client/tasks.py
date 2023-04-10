@@ -36,7 +36,7 @@ def process_all_stakehouse_validators() -> List[Dict]:
     # Chain Celery tasks: get_stakehouse_accnts, get_bls_list, get_validators
     # 1. Get stakehouse accounts from The Graph
     accounts = get_stakehouse_accnts(url, filename)
-    logging.info(f"Length ({len(accounts)}) {accounts=}")
+    logging.debug(f"Length ({len(accounts)}) {accounts=}")
 
     # 2. Get BLS keys
     bls_keys = get_bls_list(accounts)
@@ -54,4 +54,4 @@ def process_all_stakehouse_validators() -> List[Dict]:
 
 if __name__ == "__main__":
     # process_all_stakehouse_validators()
-    app.start(["-A", "tasks", "worker", "-B", "-E", "--loglevel=info"])
+    app.start(["-A", "tasks", "worker", "-B", "-E", "--loglevel=warning"])

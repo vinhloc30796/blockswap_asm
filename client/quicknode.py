@@ -1,5 +1,4 @@
 import os
-import logging
 import requests
 from typing import Dict
 
@@ -23,7 +22,6 @@ def get_validators(bls_key: str = SAMPLE_BLS_KEY) -> Dict:
     url = os.environ["QUICKNODE_URL"]
     path = os.getenv("QUICKNODE_PATH", "/eth/v1/beacon/states/finalized/validators/")
     full_url = f"{url}{path}{bls_key}"
-    print(full_url)
 
     # Params
     payload = {}

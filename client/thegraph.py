@@ -17,7 +17,7 @@ def get_stakehouse_accnts(url: str, filename: str) -> Dict:
     transport = AIOHTTPTransport(url=url)
     client = Client(transport=transport, fetch_schema_from_transport=True)
     results = client.execute(document=gql(query))
-    logging.info(f"[Stakehouse GQL] Finished! {results=}")
+    logging.debug(f"[Stakehouse GQL] Finished! {results=}")
     return results
 
 

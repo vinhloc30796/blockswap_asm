@@ -1,6 +1,13 @@
 # Redis & PostgreSQL
 version: '3.7'
 
+x-common-variables:
+  &common-variables
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
+
 services:
   redis:
     image: redis:alpine
@@ -15,11 +22,51 @@ services:
     image: postgres:12-alpine
     container_name: postgres
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      <<: *common-variables
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+
+  postgres-init:
+    build: ./client
+    image: worker
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *common-variables
+    command: "python postgres.py"
+
+  worker:
+    image: worker
+    depends_on:
+      postgres-init:
+        condition: service_completed_successfully
+    environment:
+      <<: *common-variables
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - .env
+    # Run the worker, ping The Graph & QuickNode every 30s, 
+    # insert data to PostgreSQL
+    command: "python tasks.py"
+
+  client:
+    # Go to localhost:5555 to check tasks
+    image: worker
+    depends_on:
+      worker:
+        condition: service_started
+    environment:
+      <<: *common-variables
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - 5555:5555
+    command: "celery -A tasks flower"
