@@ -24,7 +24,7 @@ blockswap-worker-1         | [2023-04-10 18:29:07,707: WARNING/ForkPoolWorker-16
 
 ### Architecture
 
-The Graph > QuickNode > Celery > PostgreSQL.
+The Graph > QuickNode > Celery (on Redis) > PostgreSQL.
 
 #### Celery
 
